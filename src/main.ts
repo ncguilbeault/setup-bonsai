@@ -133,7 +133,9 @@ async function main(): Promise<void> {
     core.setOutput(Outputs.CacheHit, cache.state);
 
     if (cache.state != CacheState.NoHit) {
-        core.info(`Restored cached Bonsai environment${environments.length == 1 ? '' : 's'} from cache '${cache.restoredFrom}' (${cache.state == CacheState.Full ? "Perfect" : "Partial"} match)`);
+        core.info(`Restored cached Bonsai packages from cache '${cache.restoredFrom}' (${cache.state == CacheState.Full ? "Perfect" : "Partial"} match)`);
+    } else {
+        core.info(`No cached Bonsai packages were able to be restored from the cache`);
     }
 
     // Install Bonsai
