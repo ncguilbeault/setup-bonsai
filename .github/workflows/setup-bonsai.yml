@@ -1,0 +1,80 @@
+# =======================================================================================================================================================================
+# Build and deploy setup-bonsai
+# =======================================================================================================================================================================
+#TODO: Add proper release deployment, this placeholder just makes v1 track main
+name: setup-bonsai
+on:
+  push:
+    # This prevents tag pushes from triggering this workflow
+    branches: ['*']
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  GIT_ADVICE: 0
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to bump tags
+      contents: write
+    steps:
+      # ----------------------------------------------------------------------- Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ----------------------------------------------------------------------- Setup tools
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      # ----------------------------------------------------------------------- Build action
+      - name: Install action dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Verify TypeScript
+        run: npm run verify
+
+      - name: Build main entrypoint
+        run: npm run build-main
+
+      - name: Build post entrypoint
+        run: npm run build-post
+
+      # ----------------------------------------------------------------------- Build .NET
+      - name: Restore .NET
+        run: dotnet restore
+
+      - name: Build .NET
+        run: dotnet build --no-restore --configuration Release -p:DebugType=none
+
+      # ----------------------------------------------------------------------- Verify nothing changed
+      # Developers are expected to push the updated `dist` folder with every commit as this will
+      # later be required for testing and allows using intermediat commits on GitHub Actions when
+      # it is nedcessary.
+      - name: Verify dist folder was up-to-date
+        id: verify-dist
+        run: |
+          git add . --intent-to-add --ignore-removal
+          git diff --name-status --exit-code
+
+      - name: Upload artifacts for debugging
+        if: steps.verify-dist.outcome != 'success' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/**
+
+      # ----------------------------------------------------------------------- Deploy
+      #TODO: Replace with something proper
+      - name: Update `v1` tag
+        if: github.ref == 'refs/heads/main'
+        run: git push --force origin ${{github.sha}}:refs/tags/v1

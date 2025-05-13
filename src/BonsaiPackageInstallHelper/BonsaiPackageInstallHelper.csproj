@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+
+    <!-- This tool does not actually use unsafe code, but this indirectly allows it to work on Mono -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="all" />
+    <PackageReference Include="Bonsai" Version="2.6.2" ExcludeAssets="runtime;contentFiles;build;buildMultitargeting;buildTransitive;analyzers;native" />
+    <IgnoresAccessChecksTo Include="Bonsai" />
+  </ItemGroup>
+</Project>

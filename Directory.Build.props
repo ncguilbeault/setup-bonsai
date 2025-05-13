@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+    <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
+
+    <!-- These are problematic / not useful in the context of this context -->
+    <SuppressImplicitGitSourceLink>true</SuppressImplicitGitSourceLink>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!--
+      The release executable is actually comitted since that's how GitHub Actions actions work
+      As such, all builds need to act like CI builds (that way developers can build locally and have their output match the CI check.)
+    -->
+    <OutputPath Condition="'$(Configuration)'=='Release'">$(MSBuildThisFileDirectory)dist/</OutputPath>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+    <!-- PDBs are problematic when it comes to determinism, just turn it off -->
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+</Project>

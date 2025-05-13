@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "target": "es2022",
+    "module": "node18",
+
+    "rootDir": "./src",
+    "outDir": "./dist-tsc",
+
+    // Strictness
+    "strict": true,
+    "allowUnreachableCode": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+  },
+
+  "include": ["src/**/*"],
+}

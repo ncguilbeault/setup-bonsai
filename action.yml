@@ -1,0 +1,22 @@
+name: "Setup Bonsai"
+description: "Used to bootstrap Bonsai environments from GitHub Actions workflows"
+author: "Bonsai Foundation"
+inputs:
+  environment-paths:
+    description: "One or more paths to Bonsai environments."
+    default: '.bonsai/'
+  inject-packages:
+    description: "Optional list of local NuGet packages to inject into the Bonsai.config of each environment."
+  enable-cache:
+    description: "Whether or not to cache the restored Bonsai environment across workflow runs."
+    default: 'true'
+  cache-key-prefix:
+    description: "Extra info to prepend to the cache key"
+outputs:
+  cache-hit:
+    description: "`none` if there was not a cache hit, `partial` if a partially compatible cache was hit, `full` if an exact cache was hit."
+runs:
+  using: 'node20'
+  main: 'dist/main.js'
+  post: 'dist/post.js'
+  post-if: success()
