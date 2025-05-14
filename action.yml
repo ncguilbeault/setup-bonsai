@@ -1,6 +1,9 @@
 name: "Setup Bonsai"
 description: "Used to bootstrap Bonsai environments from GitHub Actions workflows"
 author: "Bonsai Foundation"
+branding:
+  icon: play
+  color: red
 inputs:
   environment-paths:
     description: "One or more paths to Bonsai environments."
