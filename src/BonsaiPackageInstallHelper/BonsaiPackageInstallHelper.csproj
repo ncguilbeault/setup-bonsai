@@ -5,6 +5,7 @@
 
     <!-- This tool does not actually use unsafe code, but this indirectly allows it to work on Mono -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="all" />
