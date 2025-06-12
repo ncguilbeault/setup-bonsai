@@ -55,8 +55,8 @@ static async Task Install(string bonsaiPath)
     PackageConfiguration packageConfiguration = ConfigurationHelper.Load(bonsaiConfigPath);
 
     // Bootstrapper.ctor
-    BonsaiMachineWideSettings machineWideSettings = new();
-    ISettings settings = Settings.LoadDefaultSettings(editorFolder, null, machineWideSettings);
+    // We do not specify machine-wide settings here, it is not available in Bonsai 2.9.0 and isn't relevant to Bonsai environments
+    ISettings settings = Settings.LoadDefaultSettings(editorFolder);
     PackageSourceProvider sourceProvider = new(settings);
     PackageManager packageManager = new(sourceProvider, editorRepositoryPath);
 
