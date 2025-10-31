@@ -162,27 +162,37 @@ async function main(): Promise<void> {
     }
 
     // Bootstrap Bonsai
-    util.sectionHeading("Bootstrap each Bonsai environment");
-    {
+    // util.sectionHeading("Bootstrap each Bonsai environment");
+    // {
+    //     let allSuccessful = true;
+    //     for (const environment of environments) {
+    //         allSuccessful &&= await environment.bootstrap();
+    //         await environment.capturePackages(cache.packageCacheRoot);
+    //     }
+
+    //     if (!allSuccessful) {
+    //         core.setFailed("Failed to restore one or more Bonsai environments.");
+    //         return;
+    //     }
+    // }
+
+    // Capture cache while it's still pristine (IE: before we inject unpredictable workflow-provided packages into it)
+    // util.sectionHeading("Capture cache");
+    // await cache?.captureCache();
+
+    // Inject packages
+    if (injectPackages.size == 0) {
+        // If there are no packages to inject, we simply bootstrap without populating the injected packages repo
+        util.sectionHeading("Bootstrapping Bonsai environment...");
         let allSuccessful = true;
         for (const environment of environments) {
             allSuccessful &&= await environment.bootstrap();
-            await environment.capturePackages(cache.packageCacheRoot);
         }
 
         if (!allSuccessful) {
             core.setFailed("Failed to restore one or more Bonsai environments.");
             return;
         }
-    }
-
-    // Capture cache while it's still pristine (IE: before we inject unpredictable workflow-provided packages into it)
-    util.sectionHeading("Capture cache");
-    await cache?.captureCache();
-
-    // Inject packages
-    if (injectPackages.size == 0) {
-        core.debug("Skipping package injection since there's none to inject.");
     } else {
         util.sectionHeading("Inject packages");
 
@@ -199,7 +209,7 @@ async function main(): Promise<void> {
         }
 
         // Restore all Bonsai environments again to install the injected packages
-        core.info("Restoring packages for each Bonsai environment..");
+        core.info("Bootstrapping Bonsai environment..");
         let allSuccessful = true;
         for (const environment of environments) {
             allSuccessful &&= await environment.bootstrap(true);
