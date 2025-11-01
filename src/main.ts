@@ -204,9 +204,9 @@ async function main(): Promise<void> {
         }
 
         // Inject the packages
-        for (const environment of environments) {
-            await environment.injectPackages(injectPackages.values());
-        }
+        // for (const environment of environments) {
+        //     await environment.injectPackages(injectPackages.values());
+        // }
 
         // Restore all Bonsai environments again to install the injected packages
         core.info("Bootstrapping Bonsai environment..");
