@@ -212,7 +212,7 @@ async function main(): Promise<void> {
         core.info("Bootstrapping Bonsai environment..");
         let allSuccessful = true;
         for (const environment of environments) {
-            allSuccessful &&= await environment.bootstrap(true);
+            allSuccessful &&= await environment.bootstrap();
         }
 
         if (!allSuccessful) {
